@@ -25,17 +25,9 @@ void ReleaseFileInfo(struct FileInfo* fi);
 
 void Description(FileInfo)(struct FileInfo* fi, FILE* output);
 
-inline int IsDir(struct FileInfo* fi) {
-    return fi->ftype == file_dir;
-}
-
-inline int IsLink(struct FileInfo* fi) {
-    return fi->ftype == file_link;
-}
-
-inline int IsRegularFile(struct FileInfo* fi) {
-    return fi->ftype == file_regular;
-}
+int IsDir(struct FileInfo* fi);
+int IsLink(struct FileInfo* fi);
+int IsRegularFile(struct FileInfo* fi);
 
 void Test(FileInfo);
 

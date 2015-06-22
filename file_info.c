@@ -32,6 +32,7 @@ void getFileInfo(struct FileInfo* fi) {
     if (ret != 0) {
         return;
     }
+    
     if (S_IFREG & st.st_mode) {
         fi->ftype = file_regular;
     } else if (S_IFDIR & st.st_mode) {
@@ -53,6 +54,24 @@ void Description(FileInfo)(struct FileInfo* fi, FILE* output) {
 
 void ReleaseFileInfo(struct FileInfo* fi) {
     free(fi);
+}
+
+inline int IsDir(struct FileInfo* fi) {
+    if (fi == NULL) return 0;
+
+    return fi->ftype == file_dir;
+}
+
+inline int IsLink(struct FileInfo* fi) {
+    if (fi == NULL) return 0;
+
+    return fi->ftype == file_link;
+}
+
+inline int IsRegularFile(struct FileInfo* fi) {
+    if (fi == NULL) return 0;
+
+    return fi->ftype == file_regular;
 }
 
 void Test(FileInfo) {

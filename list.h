@@ -2,7 +2,6 @@
 #define _LIST_H__
 
 #include <stddef.h>
-#include <stdlib.h>
 #include "macro.h"
 
 struct ListNode {
@@ -39,12 +38,19 @@ struct ListNode {
     struct ListNode* _prev = ListPrev(head);\
     InsertNode(_prev, n)
 
+// not modify n
 #define DeleteNode(n) \
     (n)->next->pprev = (n)->pprev;\
     ListPrev(n)->next = (n)->next
 
 #define ListIsEmpty(head) \
-    ((size_t)(head)->next == (size_t)(head))
+    ((size_t)ListNext(head) == (size_t)(head))
+
+#define IsFirstNode(head, node) \
+    ((size_t)ListNext(head) == (size_t)(node))
+
+#define IsLastNode(head, node) \
+    ((size_t)ListNext(node) == (size_t)(head))
 
 #define ListTraversal(head, next) \
     for ((next) = ListNext(head); (next) != (head); (next) = ListNext(next))
@@ -52,59 +58,5 @@ struct ListNode {
 #define ListTraversalReverse(head, prev) \
     for ((prev) = ListPrev(head); (prev) != (head); (prev) = ListPrev(prev))
 
-void Test(List) {
-    struct T {
-        int i;
-        struct ListNode node;
-    };
-    
-    struct ListNode head;
-    struct ListNode* next;
-
-    printf("InsertFront\n");
-    ListHeadInit(&head);
-    for (int i = 0; i < 10; i++) {
-        struct T *t = malloc(sizeof(struct T));
-        t->i = i;
-        ListNodeInit(&t->node);
-        InsertFront(&head, &t->node);
-    }
-    
-    printf("ListTraversal\n");
-    ListTraversal(&head, next) {
-        struct T* p = ListData(struct T, node, next);
-        printf("%d\n", p->i);
-    }
-    printf("ListTraversalReverse\n");
-    ListTraversalReverse(&head, next) {
-        struct T* p = ListData(struct T, node, next);
-        printf("%d\n", p->i);
-    }
-
-    printf("delete\n");
-    ListTraversal(&head, next) {
-        struct T* p = ListData(struct T, node, next);
-        DeleteNode(next);
-        free(p);
-    }
-
-    printf("InsertBack\n");
-    for (int i = 0; i < 10; i++) {
-        struct T *t = malloc(sizeof(struct T));
-        t->i = i;
-        ListNodeInit(&t->node);
-        InsertBack(&head, &t->node);
-    }
-
-    printf("ListTraversal\n");
-    ListTraversal(&head, next) {
-        struct T* p = ListData(struct T, node, next);
-        printf("%d\n", p->i);
-    }
-    printf("ListTraversalReverse\n");
-    ListTraversalReverse(&head, next) {
-        struct T* p = ListData(struct T, node, next);
-        printf("%d\n", p->i);
-    }    
-}
+void Test(List);
 #endif
