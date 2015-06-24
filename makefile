@@ -1,16 +1,24 @@
-src := $(wildcard *.c)
-obj := $(src:.c=.o)
+CFLAGS:=-g -Wall
+INCLUDE:=-I./src
 
-.PHONY: test_main clean
+src := $(wildcard src/*.c)
+obj := $(src:%.c=%.o)
+dep := $(src:src%.c=build%.d)
 
-%.d: %.c
+.PHONY: libutil test_main clean
+
+build/%.d: src/%.c
+	@test -d ./build || mkdir -p ./build
 	@set -e; rm -f $@;
 	@$(CC) -M $(CPPFLAGS) $< > $@;
 
-test_main: test_main.o dir_walker.o file_info.o list.o
-	clang $^ -g -Wall -o $@
+libutil: $(obj)
+	ar -cr $@.a $(obj)
+
+test_main: test_main.c libutil.a
+	$(CC) $(CFLAGS) $(INCLUDE) $< -L./ -lutil -o $@
 
 clean:
-	-rm -rf *.o *.d test
+	-rm -rf $(obj) $(dep) libutil.a test_main
 
-include $(src:.c=.d)
+include $(dep)
